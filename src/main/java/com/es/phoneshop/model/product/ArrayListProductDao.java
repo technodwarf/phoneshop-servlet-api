@@ -11,7 +11,7 @@ public class ArrayListProductDao implements ProductDao {
     private List<Product> products;
     public ArrayListProductDao(){
         this.products = new ArrayList<>();
-        saveSampleProducts();
+        initializeSampleProducts();
     }
 
     @Override
@@ -29,8 +29,16 @@ public class ArrayListProductDao implements ProductDao {
 
     @Override
     public void save(Product product) {
-        product.setId(maxId++);
-        products.add(product);
+        if ( product.getId() != null )
+        {
+            products.set(product.getId().intValue() ,product);
+            // спросить сергея почему нет автокаста из long в int в этом методе, но есть в remove;
+            // загуглить разницу между (int) и intValue()
+        }
+        else {
+            product.setId(maxId++);
+            products.add(product);
+        }
     }
 
     @Override
@@ -38,7 +46,7 @@ public class ArrayListProductDao implements ProductDao {
         products.remove(id);
     }
 
-    private List<Product> saveSampleProducts(){
+    private List<Product> initializeSampleProducts(){
         Currency usd = Currency.getInstance("USD");
         save(new Product( "sgs", "Samsung Galaxy S", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg"));
         save(new Product( "sgs2", "Samsung Galaxy S II", new BigDecimal(200), usd, 0, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S%20II.jpg"));
