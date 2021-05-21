@@ -15,7 +15,7 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public Product getProduct(Long id) throws NoSuchElementException {
+    public synchronized Product getProduct(Long id) throws NoSuchElementException {
         return products.stream()
                         .filter(product -> id.equals(product.getId()))
                         .findAny()
@@ -23,12 +23,12 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public List<Product> findProducts() {
+    public synchronized List<Product> findProducts() {
         return products;
     }
 
     @Override
-    public void save(Product product) {
+    public synchronized void save(Product product) {
         if ( product.getId() != null )
         {
             products.set(product.getId().intValue() ,product);
@@ -42,7 +42,7 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public void delete(Long id) {
+    public synchronized void delete(Long id) {
         products.remove(id);
     }
 
