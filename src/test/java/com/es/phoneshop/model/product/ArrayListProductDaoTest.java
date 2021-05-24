@@ -45,4 +45,12 @@ public class ArrayListProductDaoTest {
         productDao.delete(product.getId());
         assertFalse(products.contains(product));
     }
+
+    @Test
+    public void testDeleteNonExistingProduct() {
+        List<Product> products = productDao.findProducts();
+        assertFalse(products.contains(1L));
+        productDao.delete(1L);
+        assertFalse(products.contains(1L));
+    }
 }
