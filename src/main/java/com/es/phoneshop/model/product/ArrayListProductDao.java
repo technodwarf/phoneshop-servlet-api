@@ -30,7 +30,7 @@ public class ArrayListProductDao implements ProductDao {
 
     @Override
     public synchronized void save(Product product) {
-        if (product.getId() != null) {
+        if (products.contains(product)) {
             products.set(product.getId().intValue(), product);
         } else {
             product.setId(maxId++);
