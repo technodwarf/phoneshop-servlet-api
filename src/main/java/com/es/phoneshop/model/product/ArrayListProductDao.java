@@ -32,8 +32,6 @@ public class ArrayListProductDao implements ProductDao {
     public synchronized void save(Product product) {
         if (product.getId() != null) {
             products.set(product.getId().intValue(), product);
-            // спросить сергея почему нет автокаста из long в int в этом методе, но есть в remove;
-            // загуглить разницу между (int) и intValue()
         } else {
             product.setId(maxId++);
             products.add(product);
@@ -42,7 +40,7 @@ public class ArrayListProductDao implements ProductDao {
 
     @Override
     public synchronized void delete(Long id) {
-        products.remove(id);
+        products.removeIf(product -> products.contains(product));
     }
 
     private List<Product> initializeSampleProducts() {
