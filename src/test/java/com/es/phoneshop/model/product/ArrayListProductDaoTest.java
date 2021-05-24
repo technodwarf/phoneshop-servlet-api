@@ -53,4 +53,15 @@ public class ArrayListProductDaoTest {
         productDao.delete(1L);
         assertFalse(products.contains(1L));
     }
+
+    @Test
+    public void testAddExistingProduct() {
+        Currency usd = Currency.getInstance("USD");
+        Product product = new Product("test-product", "Samsung Galaxy S", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg");
+        productDao.save(product);
+        List<Product> productsBefore = productDao.findProducts();
+        productDao.save(product);
+        List<Product> productsAfter = productDao.findProducts();
+        assertTrue(productsAfter.equals(productsBefore));
+    }
 }
