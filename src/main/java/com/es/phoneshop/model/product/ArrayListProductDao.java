@@ -1,10 +1,8 @@
 package com.es.phoneshop.model.product;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Currency;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ArrayListProductDao implements ProductDao {
     private long maxId;
@@ -24,8 +22,27 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public synchronized List<Product> findProducts() {
-        return products;
+    public synchronized List<Product> findProducts(String query) {
+        HashMap<Product, Integer> productMap = new HashMap<>();
+        for (int i = 0; i < products.size(); i++) {
+            for (int j = 0; j < query.split(" ").length; j++) {
+                if (products.get(i).getDescription().toUpperCase().contains((query.split(" ")[j]).toUpperCase())) {
+                    if (products.get(i).getDescription().toUpperCase().equals(query.toUpperCase())) {
+                        productMap.put(products.get(i),Integer.MAX_VALUE); // костыль, если запрос полностью совпадает названию продукта то он отобразиться первым
+                    }
+                    else if (productMap.containsKey(products.get(i))) {
+                        productMap.put(products.get(i), productMap.get(products.get(i)) + 1); //иначе добавить продукт в map либо увеличить число совпадений для продукта на 1
+                    }
+                    else productMap.put(products.get(i), 0);
+                }
+            }
+        }
+        return productMap
+                .entrySet()
+                .stream()
+                .sorted((e1, e2) -> Double.compare((e2.getValue()), (e1.getValue())))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
     }
 
     @Override
