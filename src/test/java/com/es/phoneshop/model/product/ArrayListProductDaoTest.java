@@ -12,6 +12,8 @@ import static org.junit.Assert.*;
 public class ArrayListProductDaoTest {
     private ProductDao productDao;
     private String query;
+    private SortField sortField;
+    private SortOrder sortOrder;
 
     @Before
     public void setup() {
@@ -19,14 +21,9 @@ public class ArrayListProductDaoTest {
     }
 
     @Test
-    public void testFindProductsNoResults() {
-        assertFalse(productDao.findProducts(query).isEmpty());
-    }
-
-    @Test
     public void testFindProducts() {
         query = "samsung";
-        assertNotNull(productDao.findProducts(query).toString());
+        assertNotNull(productDao.findProducts(query, sortField , sortOrder).toString());
     }
 
     @Test
@@ -47,7 +44,7 @@ public class ArrayListProductDaoTest {
         Product product = new Product("test-product", "Samsung Galaxy S", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg");
         productDao.save(product);
 
-        List<Product> products = productDao.findProducts(query);
+        List<Product> products = productDao.findProducts(query, sortField, sortOrder);
         assertTrue(products.contains(product));
         productDao.delete(product.getId());
         assertFalse(products.contains(product));
@@ -55,7 +52,7 @@ public class ArrayListProductDaoTest {
 
     @Test
     public void testDeleteNonExistingProduct() {
-        List<Product> products = productDao.findProducts(query);
+        List<Product> products = productDao.findProducts(query, sortField, sortOrder);
         assertFalse(products.contains(1L));
         productDao.delete(1L);
         assertFalse(products.contains(1L));
@@ -66,9 +63,9 @@ public class ArrayListProductDaoTest {
         Currency usd = Currency.getInstance("USD");
         Product product = new Product("test-product", "Samsung Galaxy S", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg");
         productDao.save(product);
-        List<Product> productsBefore = productDao.findProducts(query);
+        List<Product> productsBefore = productDao.findProducts(query, sortField, sortOrder);
         productDao.save(product);
-        List<Product> productsAfter = productDao.findProducts(query);
+        List<Product> productsAfter = productDao.findProducts(query, sortField, sortOrder);
         assertTrue(productsAfter.equals(productsBefore));
     }
 

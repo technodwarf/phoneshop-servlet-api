@@ -22,7 +22,7 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public synchronized List<Product> findProducts(String query) {
+    public synchronized List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder) {
         HashMap<Product, Integer> productMap = new HashMap<>();
         if (query != null) {
             for (int i = 0; i < products.size(); i++) {
@@ -37,6 +37,24 @@ public class ArrayListProductDao implements ProductDao {
                 }
             }
         }
+        if (sortField != null) {
+            Comparator<Product> comparator = Comparator.comparing(product -> {
+                if (SortField.price == sortField) {
+                    return (Comparable) product.getPrice();
+                } else {
+                    return (Comparable) product.getDescription();
+                }
+            });
+            comparator = SortOrder.desc == sortOrder ? comparator.reversed() : comparator;
+            return productMap
+                    .entrySet()
+                    .stream()
+                    .sorted((e1, e2) -> Double.compare((e2.getValue()), (e1.getValue())))
+                    .map(Map.Entry::getKey)
+                    .sorted(comparator)
+                    .collect(Collectors.toList());
+        }
+
         return productMap
                 .entrySet()
                 .stream()
