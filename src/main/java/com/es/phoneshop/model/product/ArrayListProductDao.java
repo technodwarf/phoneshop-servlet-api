@@ -24,16 +24,16 @@ public class ArrayListProductDao implements ProductDao {
     @Override
     public synchronized List<Product> findProducts(String query) {
         HashMap<Product, Integer> productMap = new HashMap<>();
-        for (int i = 0; i < products.size(); i++) {
-            for (int j = 0; j < query.split(" ").length; j++) {
-                if (products.get(i).getDescription().toUpperCase().contains((query.split(" ")[j]).toUpperCase())) {
-                    if (products.get(i).getDescription().toUpperCase().equals(query.toUpperCase())) {
-                        productMap.put(products.get(i),Integer.MAX_VALUE); // костыль, если запрос полностью совпадает названию продукта то он отобразиться первым
+        if (query != null) {
+            for (int i = 0; i < products.size(); i++) {
+                for (int j = 0; j < query.split(" ").length; j++) {
+                    if (products.get(i).getDescription().toUpperCase().contains((query.split(" ")[j]).toUpperCase())) {
+                        if (products.get(i).getDescription().toUpperCase().equals(query.toUpperCase())) {
+                            productMap.put(products.get(i), Integer.MAX_VALUE); // костыль, если запрос полностью совпадает названию продукта то он отобразиться первым
+                        } else if (productMap.containsKey(products.get(i))) {
+                            productMap.put(products.get(i), productMap.get(products.get(i)) + 1); //иначе добавить продукт в map либо увеличить число совпадений для продукта на 1
+                        } else productMap.put(products.get(i), 0);
                     }
-                    else if (productMap.containsKey(products.get(i))) {
-                        productMap.put(products.get(i), productMap.get(products.get(i)) + 1); //иначе добавить продукт в map либо увеличить число совпадений для продукта на 1
-                    }
-                    else productMap.put(products.get(i), 0);
                 }
             }
         }
