@@ -1,6 +1,7 @@
 package com.es.phoneshop.web;
 
 import com.es.phoneshop.model.product.ArrayListProductDao;
+import com.es.phoneshop.model.product.PriceHistory;
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductDao;
 
@@ -9,6 +10,7 @@ import javax.servlet.ServletContextListener;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Currency;
+import java.util.Date;
 import java.util.List;
 
 public class DemoDataServletContextListener implements ServletContextListener {
@@ -33,6 +35,18 @@ public class DemoDataServletContextListener implements ServletContextListener {
 
     }
 
+    private List<Product> generatePriceHistory(List<Product> productList) {
+        for (Product product : productList) {
+            List<PriceHistory> priceHistoryList = new ArrayList<>();
+            for (int i = 0; i < (1 + (int)Math.random()); i++) {
+                priceHistoryList.add(i,new PriceHistory(java.time.LocalDate.now().minusDays(3*i),product.getPrice().subtract(BigDecimal.valueOf((((int)Math.random()*4)*10)))));
+            }
+            priceHistoryList.set(0,new PriceHistory(java.time.LocalDate.now(),product.getPrice()));
+            product.setPriceHistoryList(priceHistoryList);
+        }
+        return productList;
+    }
+
     private List<Product> initializeSampleProducts() {
         Currency usd = Currency.getInstance("USD");
         List<Product> result = new ArrayList<>();
@@ -50,6 +64,6 @@ public class DemoDataServletContextListener implements ServletContextListener {
         result.add(new Product("simc61", "Siemens C61", new BigDecimal(80), usd, 30, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Siemens/Siemens%20C61.jpg"));
         result.add(new Product("simsxg75", "Siemens SXG75", new BigDecimal(150), usd, 40, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Siemens/Siemens%20SXG75.jpg"));
 
-        return result;
+        return generatePriceHistory(result);
     }
 }
