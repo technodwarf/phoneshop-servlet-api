@@ -24,4 +24,18 @@
     <url-pattern>/products</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>product</servlet-name>
+    <servlet-class>com.es.phoneshop.web.ProductDetailsPageServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>product</servlet-name>
+    <url-pattern>/products/*</url-pattern>
+  </servlet-mapping>
+
+  <error-page>
+    <location>/WEB-INF/pages/errorProductNotFound.jsp</location>
+    <exception-type>java.util.NoSuchElementException</exception-type>
+  </error-page>
 </web-app>

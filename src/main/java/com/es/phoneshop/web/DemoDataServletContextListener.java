@@ -21,8 +21,7 @@ public class DemoDataServletContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         boolean insertDemoData = Boolean.valueOf(servletContextEvent.getServletContext().getInitParameter("insertDemoData"));
-        if (insertDemoData)
-        {
+        if (insertDemoData) {
             for (Product product : initializeSampleProducts()) {
                 productDao.save(product);
             }
