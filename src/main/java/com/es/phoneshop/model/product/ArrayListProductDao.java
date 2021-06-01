@@ -34,6 +34,9 @@ public class ArrayListProductDao implements ProductDao {
         if (query != null) {
             if (sortField != null)
             {
+                ToIntFunction<Product> getNumberOfMatches = product -> (int) Arrays.stream(query.toLowerCase().split(" "))
+                        .filter(product.getDescription().toLowerCase()::contains)
+                        .count();
                 Comparator<Product> comparatorField = Comparator.comparing(product -> {
                     if (SortField.price == sortField) {
                         return (Comparable) product.getPrice();
@@ -43,7 +46,9 @@ public class ArrayListProductDao implements ProductDao {
                 });
                 comparatorField = SortOrder.desc == sortOrder ? comparatorField.reversed() : comparatorField;
                 return products.stream()
-                        .sorted(comparatorField)
+                        .sorted(Comparator.comparingInt(getNumberOfMatches).reversed()
+                                .thenComparing(comparatorField))
+                        .filter(product -> (getNumberOfMatches.applyAsInt(product) != 0))
                         .collect(Collectors.toList());
             }
             else {
