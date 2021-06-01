@@ -10,7 +10,6 @@ import javax.servlet.ServletContextListener;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Currency;
-import java.util.Date;
 import java.util.List;
 
 public class DemoDataServletContextListener implements ServletContextListener {
@@ -39,7 +38,9 @@ public class DemoDataServletContextListener implements ServletContextListener {
         for (Product product : productList) {
             List<PriceHistory> priceHistoryList = new ArrayList<>();
             for (int i = 0; i < (1 + (int)Math.random()); i++) {
-                priceHistoryList.add(i,new PriceHistory(java.time.LocalDate.now().minusDays(3*i),product.getPrice().subtract(BigDecimal.valueOf((((int)Math.random()*4)*10)))));
+                priceHistoryList.add(i,new PriceHistory(java.time.LocalDate.now()
+                        .minusDays(3*i),product.getPrice()
+                        .subtract(BigDecimal.valueOf((((int)Math.random()*4)*10)))));
             }
             priceHistoryList.set(0,new PriceHistory(java.time.LocalDate.now(),product.getPrice()));
             product.setPriceHistoryList(priceHistoryList);

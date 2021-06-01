@@ -1,6 +1,7 @@
 package com.es.phoneshop.model.product;
 
 import java.util.*;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 public class ArrayListProductDao implements ProductDao {
@@ -30,44 +31,32 @@ public class ArrayListProductDao implements ProductDao {
 
     @Override
     public synchronized List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder) {
-        HashMap<Product, Integer> productMap = new HashMap<>();
         if (query != null) {
-            for (int i = 0; i < products.size(); i++) {
-                for (int j = 0; j < query.split(" ").length; j++) {
-                    if (products.get(i).getDescription().toUpperCase().contains((query.split(" ")[j]).toUpperCase())) {
-                        if (products.get(i).getDescription().toUpperCase().equals(query.toUpperCase())) {
-                            productMap.put(products.get(i), Integer.MAX_VALUE); // костыль, если запрос полностью совпадает названию продукта то он отобразиться первым
-                        } else if (productMap.containsKey(products.get(i))) {
-                            productMap.put(products.get(i), productMap.get(products.get(i)) + 1); //иначе добавить продукт в map либо увеличить число совпадений для продукта на 1
-                        } else productMap.put(products.get(i), 0);
+            if (sortField != null)
+            {
+                Comparator<Product> comparatorField = Comparator.comparing(product -> {
+                    if (SortField.price == sortField) {
+                        return (Comparable) product.getPrice();
+                    } else {
+                        return (Comparable) product.getDescription();
                     }
-                }
+                });
+                comparatorField = SortOrder.desc == sortOrder ? comparatorField.reversed() : comparatorField;
+                return products.stream()
+                        .sorted(comparatorField)
+                        .collect(Collectors.toList());
+            }
+            else {
+                ToIntFunction<Product> getNumberOfMatches = product -> (int) Arrays.stream(query.toLowerCase().split(" "))
+                        .filter(product.getDescription().toLowerCase()::contains)
+                        .count();
+                return products.stream()
+                        .sorted(Comparator.comparingInt(getNumberOfMatches).reversed())
+                        .filter(product -> (getNumberOfMatches.applyAsInt(product) != 0))
+                        .collect(Collectors.toList());
             }
         }
-        if (sortField != null) {
-            Comparator<Product> comparator = Comparator.comparing(product -> {
-                if (SortField.price == sortField) {
-                    return (Comparable) product.getPrice();
-                } else {
-                    return (Comparable) product.getDescription();
-                }
-            });
-            comparator = SortOrder.desc == sortOrder ? comparator.reversed() : comparator;
-            return productMap
-                    .entrySet()
-                    .stream()
-                    .sorted((e1, e2) -> Double.compare((e2.getValue()), (e1.getValue())))
-                    .map(Map.Entry::getKey)
-                    .sorted(comparator)
-                    .collect(Collectors.toList());
-        }
-
-        return productMap
-                .entrySet()
-                .stream()
-                .sorted((e1, e2) -> Double.compare((e2.getValue()), (e1.getValue())))
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
+        else return products;
     }
 
     @Override
