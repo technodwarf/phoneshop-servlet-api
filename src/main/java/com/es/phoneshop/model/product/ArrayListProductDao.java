@@ -1,5 +1,8 @@
 package com.es.phoneshop.model.product;
 
+import com.es.phoneshop.model.sort.SortField;
+import com.es.phoneshop.model.sort.SortOrder;
+
 import java.util.*;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
@@ -32,11 +35,11 @@ public class ArrayListProductDao implements ProductDao {
     @Override
     public synchronized List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder) {
         if (query != null) {
-            ToIntFunction<Product> getNumberOfMatches = product -> (int) Arrays.stream(query.toLowerCase().split(" "))
-                    .filter(product.getDescription().toLowerCase()::contains)
-                    .count();
             if (sortField != null)
             {
+                ToIntFunction<Product> getNumberOfMatches = product -> (int) Arrays.stream(query.toLowerCase().split(" "))
+                        .filter(product.getDescription().toLowerCase()::contains)
+                        .count();
                 Comparator<Product> comparatorField = Comparator.comparing(product -> {
                     if (SortField.price == sortField) {
                         return (Comparable) product.getPrice();
@@ -52,6 +55,9 @@ public class ArrayListProductDao implements ProductDao {
                         .collect(Collectors.toList());
             }
             else {
+                ToIntFunction<Product> getNumberOfMatches = product -> (int) Arrays.stream(query.toLowerCase().split(" "))
+                        .filter(product.getDescription().toLowerCase()::contains)
+                        .count();
                 return products.stream()
                         .sorted(Comparator.comparingInt(getNumberOfMatches).reversed())
                         .filter(product -> (getNumberOfMatches.applyAsInt(product) != 0))

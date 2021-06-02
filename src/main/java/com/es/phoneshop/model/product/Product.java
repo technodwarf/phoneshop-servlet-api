@@ -1,10 +1,8 @@
 package com.es.phoneshop.model.product;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;
-import java.util.function.ToIntFunction;
 
 public class Product {
     private Long id;
