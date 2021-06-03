@@ -17,5 +17,8 @@
   <main>
     <jsp:doBody/>
   </main>
+  <p>
+    - PhoneShop, Vlad Konovalov
+  </p>
 </body>
 </html>
