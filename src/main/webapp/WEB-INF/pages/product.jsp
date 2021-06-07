@@ -42,9 +42,9 @@
             <button type="submit" name="buttonAdd2Cart">Add to cart</button>
         </td>
         <td>
-        <c:if test="${not empty error}">
+        <c:if test="${not empty param.error}">
             <div class="error" style="color:red;font-weight: bold">
-                ${error}
+                ${param.error}
             </div>
           </c:if>
           <c:if test="${not empty param.message}">
