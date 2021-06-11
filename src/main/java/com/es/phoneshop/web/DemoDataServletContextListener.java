@@ -13,7 +13,7 @@ import java.util.Currency;
 import java.util.List;
 
 public class DemoDataServletContextListener implements ServletContextListener {
-    private ProductDao productDao;
+    private final ProductDao productDao;
 
     public DemoDataServletContextListener() {
         this.productDao = ArrayListProductDao.getInstance();
@@ -37,10 +37,10 @@ public class DemoDataServletContextListener implements ServletContextListener {
     private List<Product> generatePriceHistory(List<Product> productList) {
         for (Product product : productList) {
             List<PriceHistory> priceHistoryList = new ArrayList<>();
-            for (int i = 0; i < (1 + (int)Math.random()); i++) {
-                priceHistoryList.add(i,new PriceHistory(java.time.LocalDate.now()
-                        .minusDays(3*i),product.getPrice()
-                        .subtract(BigDecimal.valueOf((((int)Math.random()*4)*10)))));
+            for (int i = 0; i < (2 + Math.random()*5); i++) {
+                priceHistoryList.add(new PriceHistory(java.time.LocalDate.now()
+                        .minusDays(3L *i),product.getPrice()
+                        .subtract(BigDecimal.valueOf((int) ((Math.random() * 4) * 10)))));
             }
             priceHistoryList.set(0,new PriceHistory(java.time.LocalDate.now(),product.getPrice()));
             product.setPriceHistoryList(priceHistoryList);
