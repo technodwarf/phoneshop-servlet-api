@@ -1,5 +1,8 @@
 package com.es.phoneshop.model.product;
 
+import com.es.phoneshop.model.sort.SortField;
+import com.es.phoneshop.model.sort.SortOrder;
+
 import java.util.*;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;

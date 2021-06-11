@@ -1,5 +1,10 @@
-package com.es.phoneshop.model.product;
+package com.es.phoneshop.model;
 
+import com.es.phoneshop.model.product.ArrayListProductDao;
+import com.es.phoneshop.model.product.Product;
+import com.es.phoneshop.model.product.ProductDao;
+import com.es.phoneshop.model.sort.SortField;
+import com.es.phoneshop.model.sort.SortOrder;
 import org.junit.Before;
 import org.junit.Test;
 
