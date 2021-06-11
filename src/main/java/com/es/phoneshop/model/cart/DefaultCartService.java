@@ -6,9 +6,11 @@ import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductDao;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 public class DefaultCartService implements CartService {
-    private static final  String CART_SESSION_ATTRIBUTE = DefaultCartService.class.getName() + ".cart";
+    private static final String CART_SESSION_ATTRIBUTE =
+            DefaultCartService.class.getName() + ".cart";
 
     private ProductDao productDao;
 
@@ -17,7 +19,8 @@ public class DefaultCartService implements CartService {
     }
 
     private static class SingletonHelper {
-        private static final DefaultCartService INSTANCE = new DefaultCartService();
+        private static final DefaultCartService INSTANCE =
+                new DefaultCartService();
     }
 
     public static DefaultCartService getInstance() {
@@ -28,26 +31,29 @@ public class DefaultCartService implements CartService {
     public synchronized Cart getCart(HttpServletRequest request) {
         Cart cart = (Cart) request.getSession().getAttribute(CART_SESSION_ATTRIBUTE);
         if (cart == null) {
-            request.getSession().setAttribute(CART_SESSION_ATTRIBUTE, cart= new Cart());
+            request.getSession().setAttribute(CART_SESSION_ATTRIBUTE, cart = new Cart());
         }
         return cart;
     }
 
     @Override
-    public synchronized void add(Cart cart, Long productId, int quantity) throws OutOfStockException {
+    public synchronized void add(Cart cart, Long productId,
+                                 int quantity) throws OutOfStockException {
         Product product = productDao.getProduct(productId);
         if (product.getStock() < quantity) {
             throw new OutOfStockException(product, product.getStock());
         }
-        boolean itemNotExists = true;
-        for (CartItem cartItem : cart.getItems()) {
-            if (cartItem.getProduct().getId() == productId) {
-                cartItem.setQuantity(cartItem.getQuantity() + quantity);
-                itemNotExists = false;
-                break;
-            }
-        }
-        if (itemNotExists) cart.getItems().add(new CartItem(product, quantity));
-        product.setStock(product.getStock() - 1);
+
+        Optional<CartItem> optionalCartItem = cart.getItems().stream()
+                .filter(item -> item.getProduct().equals(product))
+                .findAny();
+
+        optionalCartItem.ifPresentOrElse(cartItem -> {
+            cartItem.setQuantity(cartItem.getQuantity() + quantity);
+        }, () -> {
+            cart.getItems().add(new CartItem(product, quantity));
+        });
+
+        product.setStock(product.getStock() - quantity);
     }
 }
