@@ -37,16 +37,17 @@ public class ProductDetailsPageServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Long productId = parseProductId(request);
-        String buttonAdd2Cart = request.getParameter("buttonAdd2Cart");
-        if (request.getParameter("buttonAdd2Cart") != null) {
+        String quantity = request.getParameter("quantity");
             try {
                 Cart cart = cartService.getCart(request);
-                cartService.add(cart, productId, 1);
+                cartService.add(cart, productId, Integer.parseInt(quantity));
             } catch (OutOfStockException e) {
-                response.sendRedirect(request.getContextPath() + "/products/" + productId + "?error=Out of stock.");
+                response.sendRedirect(request.getContextPath() + "/products/" + productId + "?error=Not enough in stock.");
+                return;
+            } catch (NumberFormatException e) {
+                response.sendRedirect(request.getContextPath() + "/products/" + productId + "?error=Error : numbers only.");
                 return;
             }
-        }
         response.sendRedirect(request.getContextPath() + "/products/" + productId + "?message=Product added!");
     }
 
