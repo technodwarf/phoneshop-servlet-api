@@ -44,6 +44,16 @@
     <servlet-class>com.es.phoneshop.web.CartPageServlet</servlet-class>
   </servlet>
 
+  <servlet-mapping>
+    <servlet-name>deleteCartItem</servlet-name>
+    <url-pattern>/cart/deleteCartItem/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>deleteCartItem</servlet-name>
+    <servlet-class>com.es.phoneshop.web.DeleteCartItemServlet</servlet-class>
+  </servlet>
+
   <error-page>
     <location>/WEB-INF/pages/errorProductNotFound.jsp</location>
     <exception-type>java.util.NoSuchElementException</exception-type>

@@ -59,7 +59,7 @@ public class DefaultCartService implements CartService {
 
     @Override
     public synchronized void update(Cart cart, Long productId,
-                                 int quantity) throws OutOfStockException {
+                                    int quantity) throws OutOfStockException {
         Product product = productDao.getProduct(productId);
 
         CartItem cartItem = cart.getItems().stream()
@@ -82,8 +82,16 @@ public class DefaultCartService implements CartService {
             //if user removed some quantity of product then
             //return it to stock,update quantity in cart
         } else if (quantity <= 0) {
-            cartItem.getProduct().setStock(stock + oldQuantity);
-            cart.getItems().remove(cartItem);
+            delete(cart,productId);
         }
+    }
+
+    @Override
+    public void delete(Cart cart, Long productId) {
+        productDao.getProduct(productId).setStock(
+                productDao.getProduct(productId).getStock() +
+                        cart.getItems().get(Math.toIntExact(productId)).getQuantity());
+        cart.getItems().removeIf(item ->
+                productId.equals(item.getProduct().getId()));
     }
 }

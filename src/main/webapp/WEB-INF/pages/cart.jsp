@@ -60,11 +60,16 @@
                     <input name="quantity" value="${quantity}" class="quantity"/>
                     <input type="hidden" name="productId" value="${item.product.id}"/>
                 </td>
+                <td>
+                    <button form="deleteCartItem" formaction="${pageContext.servletContext.contextPath}/cart/deleteCartItem/${item.product.id}">Delete</button>
+                </td>
             </tr>
         </c:forEach>
         </table>
         <p>
             <button>Update</button>
         </p>
+    </form>
+    <form id="deleteCartItem" method="post">
     </form>
 </tags:master>

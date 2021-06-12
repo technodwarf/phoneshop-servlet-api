@@ -41,7 +41,7 @@
             <tr>
                 <td>quantity</td>
                 <td>
-                    <input name="quantity">
+                    <input name="quantity" value="1">
                     <button>Add to cart</button>
                 </td>
                 <td>

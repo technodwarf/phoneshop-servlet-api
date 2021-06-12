@@ -41,25 +41,27 @@ public class CartPageServlet extends HttpServlet {
         String[] quantities = request.getParameterValues("quantity");
 
         Map<Long, String> errors = new HashMap<>();
-        for (int i = 0; i < productIds.length; i++) {
-            Long productId = Long.valueOf(productIds[i]);
+        if (productIds != null) {
+            for (int i = 0; i < productIds.length; i++) {
+                Long productId = Long.valueOf(productIds[i]);
 
-            int quantity;
-            try {
-                quantity = getQuantity(quantities[i], request);
-                if (quantity < 0) throw new NumberFormatException();
-                cartService.update(cartService.getCart(request), productId, quantity);
-            } catch (OutOfStockException | NumberFormatException | ParseException e) {
-                errorHandler(errors, productId, e);
+                int quantity;
+                try {
+                    quantity = getQuantity(quantities[i], request);
+                    if (quantity < 0) throw new NumberFormatException();
+                    cartService.update(cartService.getCart(request), productId, quantity);
+                } catch (OutOfStockException | NumberFormatException | ParseException e) {
+                    errorHandler(errors, productId, e);
+                }
+            }
+            if (errors.isEmpty()) {
+                response.sendRedirect(request.getContextPath() + "/cart?message=Cart updated successfully!");
+            } else {
+                request.setAttribute("errors", errors);
+                doGet(request, response);
             }
         }
-        if (errors.isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/cart?message=Cart updated successfully!");
-        }
-        else {
-            request.setAttribute("errors", errors);
-            doGet(request, response);
-        }
+        else response.sendRedirect(request.getContextPath() + "/cart?message=Go buy yourself something nice first!");
     }
 
     private void errorHandler(Map<Long, String> errors, Long productId, Exception e) throws ServletException, IOException {
