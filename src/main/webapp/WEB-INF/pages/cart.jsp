@@ -9,6 +9,14 @@
         <p>
             Cart: ${cart}
         </p>
+        <p>
+            Total cost :
+            <fmt:formatNumber value="${cart.totalCost}" type="currency"
+                              currencySymbol="${cart.items[0].product.currency.symbol}"/>
+        </p>
+        <p>
+            Total quantity : ${cart.totalQuantity}
+        </p>
         <c:if test="${not empty param.message}">
             <div class="success" style="color:green;font-style: italic">
                     ${param.message}

@@ -11,9 +11,6 @@
   <form>
     <input name="query" value="${param.query}" placeholder="Enter product name...">
     <button>Search</button>
-      <a href="http://localhost:8080/phoneshop-servlet-api/cart">
-          🛒
-      </a>
   </form>
   <table>
     <thead>

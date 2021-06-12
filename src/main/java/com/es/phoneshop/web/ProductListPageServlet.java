@@ -1,5 +1,8 @@
 package com.es.phoneshop.web;
 
+import com.es.phoneshop.model.cart.Cart;
+import com.es.phoneshop.model.cart.CartService;
+import com.es.phoneshop.model.cart.DefaultCartService;
 import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.ProductDao;
 import com.es.phoneshop.model.sort.SortField;
@@ -15,11 +18,13 @@ import java.util.Optional;
 
 public class ProductListPageServlet extends HttpServlet {
     private ProductDao productDao;
+    private CartService cartService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         productDao = ArrayListProductDao.getInstance();
+        cartService = DefaultCartService.getInstance();
     }
 
     @Override
@@ -27,6 +32,8 @@ public class ProductListPageServlet extends HttpServlet {
         String query = request.getParameter("query");
         String sortField = request.getParameter("sort");
         String sortOrder = request.getParameter("order");
+        Cart cart = cartService.getCart(request);
+        request.setAttribute("cart", cart);
         request.setAttribute("products", productDao.findProducts(query,
                 Optional.ofNullable(sortField).map(SortField::valueOf).orElse(null),
                 Optional.ofNullable(sortOrder).map(SortOrder::valueOf).orElse(null)));

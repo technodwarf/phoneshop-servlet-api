@@ -6,6 +6,7 @@ import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductDao;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.Optional;
 
 public class DefaultCartService implements CartService {
@@ -55,6 +56,7 @@ public class DefaultCartService implements CartService {
         });
 
         product.setStock(product.getStock() - quantity);
+        recalculateCart(cart);
     }
 
     @Override
@@ -82,16 +84,30 @@ public class DefaultCartService implements CartService {
             //if user removed some quantity of product then
             //return it to stock,update quantity in cart
         } else if (quantity <= 0) {
-            delete(cart,productId);
+            delete(cart, productId);
         }
+        recalculateCart(cart);
     }
 
     @Override
     public void delete(Cart cart, Long productId) {
         productDao.getProduct(productId).setStock(
                 productDao.getProduct(productId).getStock() +
-                        cart.getItems().get(Math.toIntExact(productId)).getQuantity());
-        cart.getItems().removeIf(item ->
-                productId.equals(item.getProduct().getId()));
+                        cart.getItems().stream().filter(cartItem -> cartItem.getProduct().getId()
+                                .equals(productId)).findFirst().get().getProduct().getStock());
+
+        cart.getItems().removeIf(item -> item.getProduct().getId().equals(productId));
+
+        recalculateCart(cart);
+    }
+
+    private void recalculateCart(Cart cart) {
+        cart.setTotalQuantity(cart.getItems().stream()
+                .map(CartItem::getQuantity)
+                .mapToInt(q -> q).sum());
+
+        cart.setTotalCost(cart.getItems().stream()
+                .map(cartItem -> cartItem.getProduct().getPrice().multiply(new BigDecimal(cartItem.getQuantity())))
+                .reduce(new BigDecimal(0), (a, b) -> a.add(b)));
     }
 }

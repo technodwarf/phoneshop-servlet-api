@@ -13,6 +13,10 @@
       <img src="${pageContext.servletContext.contextPath}/images/logo.svg"/>
       PhoneShop
     </a>
+    <a href="http://localhost:8080/phoneshop-servlet-api/cart" style="position: absolute;right: 25px">
+      <img src="http://cdn.onlinewebfonts.com/svg/img_60846.png"/>
+      ${cart.totalCost}$
+    </a>
   </header>
   <main>
     <jsp:doBody/>
