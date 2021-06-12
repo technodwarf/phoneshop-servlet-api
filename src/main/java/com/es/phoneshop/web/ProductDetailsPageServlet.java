@@ -1,10 +1,9 @@
 package com.es.phoneshop.web;
 
-import com.es.phoneshop.model.cart.Cart;
-import com.es.phoneshop.model.exception.OutOfStockException;
-import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.cart.CartService;
 import com.es.phoneshop.model.cart.DefaultCartService;
+import com.es.phoneshop.model.exception.OutOfStockException;
+import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.ProductDao;
 
 import javax.servlet.ServletConfig;
@@ -39,13 +38,13 @@ public class ProductDetailsPageServlet extends HttpServlet {
         Long productId = parseProductId(request);
         String quantity = request.getParameter("quantity");
             try {
-                Cart cart = cartService.getCart(request);
-                cartService.add(cart, productId, Integer.parseInt(quantity));
+                if (Integer.parseInt(quantity) <= 0 ) throw new NumberFormatException();
+                cartService.add(cartService.getCart(request), productId, Integer.parseInt(quantity));
             } catch (OutOfStockException e) {
                 response.sendRedirect(request.getContextPath() + "/products/" + productId + "?error=Not enough in stock.");
                 return;
             } catch (NumberFormatException e) {
-                response.sendRedirect(request.getContextPath() + "/products/" + productId + "?error=Error : numbers only.");
+                response.sendRedirect(request.getContextPath() + "/products/" + productId + "?error=Error : numbers greater than 0 only.");
                 return;
             }
         response.sendRedirect(request.getContextPath() + "/products/" + productId + "?message=Product added!");

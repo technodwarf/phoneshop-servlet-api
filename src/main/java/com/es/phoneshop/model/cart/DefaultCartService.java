@@ -12,7 +12,7 @@ public class DefaultCartService implements CartService {
     private static final String CART_SESSION_ATTRIBUTE =
             DefaultCartService.class.getName() + ".cart";
 
-    private ProductDao productDao;
+    private final ProductDao productDao;
 
     private DefaultCartService() {
         productDao = ArrayListProductDao.getInstance();
@@ -55,5 +55,35 @@ public class DefaultCartService implements CartService {
         });
 
         product.setStock(product.getStock() - quantity);
+    }
+
+    @Override
+    public synchronized void update(Cart cart, Long productId,
+                                 int quantity) throws OutOfStockException {
+        Product product = productDao.getProduct(productId);
+
+        CartItem cartItem = cart.getItems().stream()
+                .filter(item -> item.getProduct().equals(product))
+                .findFirst().get();
+
+        int oldQuantity = cartItem.getQuantity();
+        int stock = cartItem.getProduct().getStock();
+
+        if (oldQuantity < quantity) {
+            if (stock - (quantity - oldQuantity) < 0) throw new
+                    OutOfStockException(product, product.getStock());
+            cartItem.getProduct().setStock(stock - (quantity - oldQuantity));
+            cartItem.setQuantity(quantity);
+            //not enough in stock? throw exception
+            //else add diff between new and old quantities
+        } else if (oldQuantity > quantity) {
+            cartItem.getProduct().setStock(stock + (oldQuantity - quantity));
+            cartItem.setQuantity(quantity);
+            //if user removed some quantity of product then
+            //return it to stock,update quantity in cart
+        } else if (quantity <= 0) {
+            cartItem.getProduct().setStock(stock + oldQuantity);
+            cart.getItems().remove(cartItem);
+        }
     }
 }
