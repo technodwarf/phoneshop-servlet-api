@@ -9,7 +9,7 @@
             ${product.description}
     </p>
     <table>
-        <c:forEach var="productPriceHistory" items="${priceHistoryList}">
+        <c:forEach var="productPriceHistory" items="${product.priceHistoryList}">
             <tr>
                 <td>
                     <c:out value="${productPriceHistory.date}"></c:out>
