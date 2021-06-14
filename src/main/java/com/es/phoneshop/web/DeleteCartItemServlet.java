@@ -29,10 +29,13 @@ public class DeleteCartItemServlet extends HttpServlet {
         String productId = request.getPathInfo().substring(1);
 
         Cart cart = cartService.getCart(request);
-        cartService.delete(cart, Long.valueOf(productId));
-
-        response.sendRedirect(request.getContextPath() + "/cart?message=" +
-                productDao.getProduct(Long.valueOf(productId)).getDescription() +
-                " removed from cart.");
+        try {
+            cartService.delete(cart, Long.valueOf(productId));
+            response.sendRedirect(request.getContextPath() + "/cart?message=" +
+                    productDao.getProduct(Long.valueOf(productId)).getDescription() +
+                    " removed from cart.");
+        } catch (NumberFormatException e) {
+            response.sendRedirect(request.getContextPath() + "/cart?message=NO WAY!");
+        }
     }
 }
