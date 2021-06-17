@@ -47,6 +47,10 @@
                             ${product.description}
                     </a>
                 </td>
+                <td class="price">
+                    <fmt:formatNumber value="${product.price}" type="currency"
+                                      currencySymbol="${product.currency.symbol}"/>
+                </td>
                 <td>
                     <fmt:formatNumber value="${product.price}" type="currency"
                                       currencySymbol="${product.currency.symbol}"/>
@@ -64,4 +68,7 @@
             </tr>
         </c:forEach>
     </table>
+    <footer>
+        <jsp:include page="footer.jsp"/>
+    </footer>
 </tags:master>

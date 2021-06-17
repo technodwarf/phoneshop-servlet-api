@@ -6,23 +6,17 @@
 <jsp:useBean id="product" type="com.es.phoneshop.model.product.Product" scope="request"/>
 <tags:master pageTitle="Product Details">
     <p>
-        Cart: ${cart}
-    </p>
-    <p>
-            ${product.description}
+
     </p>
     <form method="post">
-        <table>
+        <table style="border-spacing: 3px;border-collapse: separate">
+            <tr>
+                <th colspan="2">${product.description}</th>
+            </tr>
             <tr>
                 <td>Image</td>
                 <td>
                     <img src="${product.imageUrl}">
-                </td>
-            </tr>
-            <tr>
-                <td>Code</td>
-                <td>
-                        ${product.code}
                 </td>
             </tr>
             <tr>
@@ -34,9 +28,7 @@
             </tr>
             <tr>
                 <td>Stock</td>
-                <td>
-                        ${product.stock}
-                </td>
+                <td>${product.stock}</td>
             </tr>
             <tr>
                 <td>quantity</td>
@@ -60,5 +52,9 @@
                 </c:if>
             </tr>
         </table>
+        <p></p>
+        <footer>
+            <jsp:include page="footer.jsp"/>
+        </footer>
     </form>
 </tags:master>

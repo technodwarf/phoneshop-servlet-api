@@ -54,6 +54,16 @@
     <servlet-class>com.es.phoneshop.web.DeleteCartItemServlet</servlet-class>
   </servlet>
 
+  <servlet>
+    <servlet-name>productPriceHistory</servlet-name>
+    <servlet-class>com.es.phoneshop.web.ProductPriceHistoryServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>productPriceHistory</servlet-name>
+    <url-pattern>/productPriceHistory/*</url-pattern>
+  </servlet-mapping>
+
   <error-page>
     <location>/WEB-INF/pages/errorProductNotFound.jsp</location>
     <exception-type>java.util.NoSuchElementException</exception-type>

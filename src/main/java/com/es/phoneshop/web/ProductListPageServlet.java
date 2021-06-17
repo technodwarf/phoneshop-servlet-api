@@ -6,6 +6,7 @@ import com.es.phoneshop.model.cart.DefaultCartService;
 import com.es.phoneshop.model.exception.OutOfStockException;
 import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.ProductDao;
+import com.es.phoneshop.model.product.RecentlyViewed;
 import com.es.phoneshop.model.sort.SortField;
 import com.es.phoneshop.model.sort.SortOrder;
 
@@ -20,12 +21,14 @@ import java.util.Optional;
 public class ProductListPageServlet extends HttpServlet {
     private ProductDao productDao;
     private CartService cartService;
+    private RecentlyViewed recentlyViewed;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         productDao = ArrayListProductDao.getInstance();
         cartService = DefaultCartService.getInstance();
+        recentlyViewed = RecentlyViewed.getInstance();
     }
 
     @Override
@@ -35,6 +38,7 @@ public class ProductListPageServlet extends HttpServlet {
         String sortOrder = request.getParameter("order");
         Cart cart = cartService.getCart(request);
         request.setAttribute("cart", cart);
+        request.setAttribute("recentlyViewed", recentlyViewed.getQueue(request));
         request.setAttribute("products", productDao.findProducts(query,
                 Optional.ofNullable(sortField).map(SortField::valueOf).orElse(null),
                 Optional.ofNullable(sortOrder).map(SortOrder::valueOf).orElse(null)));
