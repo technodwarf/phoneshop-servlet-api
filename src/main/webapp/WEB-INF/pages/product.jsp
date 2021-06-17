@@ -33,9 +33,10 @@
             <tr>
                 <td>quantity</td>
                 <td>
-                    <input name="quantity">
+                    <input name="quantity" value="1">
                     <button>Add to cart</button>
                 </td>
+                <c:if test="${not empty param.message || not empty param.error}">
                 <td>
                     <c:if test="${not empty param.error}">
                         <div class="error" style="color:red;font-weight: bold">
@@ -48,6 +49,7 @@
                         </div>
                     </c:if>
                 </td>
+                </c:if>
             </tr>
         </table>
         <p></p>
