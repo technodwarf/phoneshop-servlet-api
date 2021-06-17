@@ -48,12 +48,9 @@
                     </a>
                 </td>
                 <td class="price">
-                    <fmt:formatNumber value="${product.price}" type="currency"
-                                      currencySymbol="${product.currency.symbol}"/>
-                </td>
-                <td>
-                    <fmt:formatNumber value="${product.price}" type="currency"
-                                      currencySymbol="${product.currency.symbol}"/>
+                    <a href="${pageContext.servletContext.contextPath}/productPriceHistory/${product.id}">
+                        <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/>
+                    </a>
                 </td>
                 <td>
                     <form id="addCartItem${product.id}">
