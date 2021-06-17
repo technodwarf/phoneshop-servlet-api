@@ -2,6 +2,7 @@ package com.es.phoneshop.web;
 
 import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.ProductDao;
+import com.es.phoneshop.model.product.RecentlyViewed;
 import com.es.phoneshop.model.sort.SortField;
 import com.es.phoneshop.model.sort.SortOrder;
 
@@ -15,11 +16,13 @@ import java.util.Optional;
 
 public class ProductListPageServlet extends HttpServlet {
     private ProductDao productDao;
+    private RecentlyViewed recentlyViewed;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         productDao = ArrayListProductDao.getInstance();
+        recentlyViewed = RecentlyViewed.getInstance();
     }
 
     @Override
@@ -27,6 +30,7 @@ public class ProductListPageServlet extends HttpServlet {
         String query = request.getParameter("query");
         String sortField = request.getParameter("sort");
         String sortOrder = request.getParameter("order");
+        request.setAttribute("recentlyViewed", recentlyViewed.getQueue(request));
         request.setAttribute("products", productDao.findProducts(query,
                 Optional.ofNullable(sortField).map(SortField::valueOf).orElse(null),
                 Optional.ofNullable(sortOrder).map(SortOrder::valueOf).orElse(null)));
