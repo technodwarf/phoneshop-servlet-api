@@ -21,11 +21,50 @@ td {
   border : 1px solid gray;
   vertical-align: top;
 }
-.price {
-  text-align: right;
+.success {
+  color:green;
+  font-style: italic;
 }
+
+.error {
+  color:red;
+  font-weight: bold;
+}
+
+.emptyCartPNG {
+  height: 350px;
+}
+
 img.product-tile {
   max-width: 64px;
+  text-align: center;
+}
+
+.textCenterAlign {
+  text-align: center;
+}
+
+.productTable {
+  border-spacing: 3px;
+  border-collapse: separate;
+}
+
+.textRightAlign {
+  text-align: right;
+}
+
+.smallCart {
+  height: 12px;
+}
+
+.bigCart {
+  position: absolute;
+  right: 25px;
+}
+
+.priceHistoryRow {
+  border-spacing: 3px;
+  border-collapse: separate;
 }
 
 .tooltip {

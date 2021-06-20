@@ -9,7 +9,7 @@
         <form method="post" action="${pageContext.servletContext.contextPath}/checkout">
             <p></p>
             <c:if test="${not empty param.message}">
-                <div class="success" style="color:green;font-style: italic">
+                <div class="success">
                         ${param.message}
                 </div>
             </c:if>
@@ -48,7 +48,7 @@
 
             <h2>Delivery & payment</h2>
             <c:if test="${not empty errors}">
-                <div class="error" style="color:red;font-weight: bold">
+                <div class="error">
                     Some of the fields were not saved.
                 </div>
             </c:if>
@@ -59,7 +59,7 @@
                         <c:set var="error" value="${errors['firstName']}"/>
                         <input name="firstName" value="${not empty error ? param['firstName'] : order.firstName}">
                         <c:if test="${not empty error}">
-                            <div class="error" style="color:red;font-weight: bold">
+                            <div class="error">
                                     ${error}
                             </div>
                         </c:if>
@@ -71,7 +71,7 @@
                         <c:set var="error" value="${errors['lastName']}"/>
                         <input name="lastName" value="${not empty error ? param['lastName'] : order.lastName}">
                         <c:if test="${not empty error}">
-                            <div class="error" style="color:red;font-weight: bold">
+                            <div class="error">
                                     ${error}
                             </div>
                         </c:if>
@@ -83,7 +83,7 @@
                         <c:set var="error" value="${errors['phone']}"/>
                         <input name="phone" value="${not empty error ? param['phone'] : order.phone}">
                         <c:if test="${not empty error}">
-                            <div class="error" style="color:red;font-weight: bold">
+                            <div class="error">
                                     ${error}
                             </div>
                         </c:if>
@@ -96,7 +96,7 @@
                         <input name="deliveryAddress"
                                value="${not empty error ? param['deliveryAddress'] : order.deliveryAddress}">
                         <c:if test="${not empty error}">
-                            <div class="error" style="color:red;font-weight: bold">
+                            <div class="error">
                                     ${error}
                             </div>
                         </c:if>
@@ -109,7 +109,7 @@
                         <input type="date" name="deliveryDate"
                                value="${not empty error ? param['deliveryDate'] : order.deliveryDate}">
                         <c:if test="${not empty error}">
-                            <div class="error" style="color:red;font-weight: bold">
+                            <div class="error">
                                     ${error}
                             </div>
                         </c:if>
@@ -126,7 +126,7 @@
                                     <option>Cash</option>
                                     <option>Credit card</option>
                                 </select>
-                                <div class="error" style="color:red;font-weight: bold">
+                                <div class="error">
                                         ${error}
                                 </div>
                             </c:when>

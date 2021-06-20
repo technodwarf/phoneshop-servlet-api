@@ -9,7 +9,7 @@
 
     </p>
     <form method="post">
-        <table style="border-spacing: 3px;border-collapse: separate">
+        <table class="productTable">
             <tr>
                 <th colspan="2">${product.description}</th>
             </tr>
@@ -39,12 +39,12 @@
                 <c:if test="${not empty param.message || not empty param.error}">
                 <td>
                     <c:if test="${not empty param.error}">
-                        <div class="error" style="color:red;font-weight: bold">
+                        <div class="error">
                                 ${param.error}
                         </div>
                     </c:if>
                     <c:if test="${not empty param.message}">
-                        <div class="success" style="color:green;font-style: italic">
+                        <div class="success">
                                 ${param.message}
                         </div>
                     </c:if>

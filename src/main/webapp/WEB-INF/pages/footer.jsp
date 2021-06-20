@@ -5,11 +5,11 @@
 
 <c:if test="${recentlyViewed.size() > 0}">
     <h3>Recently viewed</h3>
-    <table style="border-spacing: 3px;border-collapse: separate">
+    <table class="priceHistoryRow">
         <tr>
             <c:forEach var="product" items="${recentlyViewed}">
-                <td style="text-align: center">
-                    <img class="product-tile" src="${product.imageUrl}" style="text-align: center">
+                <td class="textCenterAlign">
+                    <img class="product-tile" src="${product.imageUrl}">
                     <br>
                     <a href="${pageContext.servletContext.contextPath}/products/${product.id}">
                             ${product.description}

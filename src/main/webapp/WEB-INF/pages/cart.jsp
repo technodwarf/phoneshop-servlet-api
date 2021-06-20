@@ -8,8 +8,7 @@
     <form method="post" action="${pageContext.servletContext.contextPath}/cart">
     <c:if test="${empty cart.items}">
         <a href="${pageContext.servletContext.contextPath}">
-            <img src="https://www.99fashionbrands.com/wp-content/uploads/2020/12/empty_cart-1200x900.png"
-                 style="height: 350px">
+            <img class="emptyCartPNG" src="https://www.99fashionbrands.com/wp-content/uploads/2020/12/empty_cart-1200x900.png">
         </a>
     </c:if>
     <c:if test="${not empty cart.items}">
@@ -21,12 +20,12 @@
             Total quantity : ${cart.totalQuantity}
         </p>
         <c:if test="${not empty param.message}">
-            <div class="success" style="color:green;font-style: italic">
+            <div class="success">
                     ${param.message}
             </div>
         </c:if>
         <c:if test="${not empty errors}">
-            <div class="error" style="color:red;font-weight: bold">
+            <div class="error">
                 Some of the items were not updated.
                 See below for more info.
             </div>
@@ -63,7 +62,7 @@
                     </td>
                     <td class="quantity">
                         <c:if test="${not empty errors[item.product.id]}">
-                            <div class="error" style="color:red;font-weight: bold">
+                            <div class="error">
                                     ${errors[item.product.id]}
                             </div>
                         </c:if>

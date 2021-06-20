@@ -41,7 +41,7 @@
 
     <h2>Delivery & payment</h2>
     <c:if test="${not empty errors}">
-        <div class="error" style="color:red;font-weight: bold">
+        <div class="error">
             Some of the fields were not saved.
         </div>
     </c:if>
