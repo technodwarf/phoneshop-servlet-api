@@ -21,13 +21,77 @@ td {
   border : 1px solid gray;
   vertical-align: top;
 }
-.price {
-  text-align: right;
-}
-img.product-tile {
-  max-width: 64px;
+.success {
+  color:green;
+  font-style: italic;
 }
 
+.error {
+  color:red;
+  font-weight: bold;
+}
+
+.emptyCartPNG {
+  height: 350px;
+}
+
+img.product-tile {
+  max-width: 64px;
+  text-align: center;
+}
+
+.textCenterAlign {
+  text-align: center;
+}
+
+.productTable {
+  border-spacing: 3px;
+  border-collapse: separate;
+}
+
+.textRightAlign {
+  text-align: right;
+}
+
+.smallCart {
+  height: 12px;
+}
+
+.bigCart {
+  position: absolute;
+  right: 25px;
+}
+
+.priceHistoryRow {
+  border-spacing: 3px;
+  border-collapse: separate;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: max-content;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 5px;
+
+  left: 75px;
+  top: -5px;
+
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
 /* Page specific styles */
 body.product-list {
 
