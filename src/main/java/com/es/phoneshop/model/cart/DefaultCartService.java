@@ -34,6 +34,7 @@ public class DefaultCartService implements CartService {
         if (cart == null) {
             request.getSession().setAttribute(CART_SESSION_ATTRIBUTE, cart = new Cart());
         }
+        recalculateCart(cart);
         return cart;
     }
 
