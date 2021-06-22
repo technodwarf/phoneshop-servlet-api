@@ -13,12 +13,12 @@
         <button>Search</button>
     </form>
     <c:if test="${not empty param.error}">
-        <div class="error" style="color:red;font-weight: bold">
+        <div class="error">
                 ${param.error}
         </div>
     </c:if>
     <c:if test="${not empty param.message}">
-        <div class="success" style="color:green;font-style: italic">
+        <div class="success">
                 ${param.message}
         </div>
     </c:if>
@@ -54,11 +54,11 @@
                 </td>
                 <td>
                     <form id="addCartItem${product.id}">
-                        <input name="quantity" value="1" size="1" style="text-align: right">
+                        <input class="textRightAlign" name="quantity" value="1" size="1">
                         <input name="productId" type="hidden" value="${product.id}">
                         <button form="addCartItem${product.id}" formmethod="post">
                             Add to
-                            <img src="http://cdn.onlinewebfonts.com/svg/img_60846.png" style="height: 12px"/>
+                            <img class="smallCart" src="http://cdn.onlinewebfonts.com/svg/img_60846.png">
                         </button>
                     </form>
                 </td>
