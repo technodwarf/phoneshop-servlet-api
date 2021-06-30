@@ -10,6 +10,8 @@ public interface ProductDao {
 
     List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder);
 
+    List<Product> advancedFindProducts(String query, SortField sortField, SortOrder sortOrder, String searchType, int minprice, int maxprice);
+
     void save(Product product);
 
     void delete(Long id);
