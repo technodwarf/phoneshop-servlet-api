@@ -18,7 +18,7 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     private long maxId;
-    private List<Product> products;
+    private final List<Product> products;
 
     private ArrayListProductDao() {
         this.products = new ArrayList<>();
@@ -38,8 +38,7 @@ public class ArrayListProductDao implements ProductDao {
             ToIntFunction<Product> getNumberOfMatches = product -> (int) Arrays.stream(query.toLowerCase().split(" "))
                     .filter(product.getDescription().toLowerCase()::contains)
                     .count();
-            if (sortField != null)
-            {
+            if (sortField != null) {
                 Comparator<Product> comparatorField = Comparator.comparing(product -> {
                     if (SortField.price == sortField) {
                         return (Comparable) product.getPrice();
@@ -53,15 +52,55 @@ public class ArrayListProductDao implements ProductDao {
                                 .thenComparing(comparatorField))
                         .filter(product -> (getNumberOfMatches.applyAsInt(product) != 0))
                         .collect(Collectors.toList());
-            }
-            else {
+            } else {
                 return products.stream()
                         .sorted(Comparator.comparingInt(getNumberOfMatches).reversed())
                         .filter(product -> (getNumberOfMatches.applyAsInt(product) != 0))
                         .collect(Collectors.toList());
             }
-        }
-        else return products;
+        } else return products;
+    }
+
+    @Override
+    public List<Product> advancedFindProducts(String query, SortField sortField, SortOrder sortOrder, String searchType, int minprice, int maxprice) {
+        List<Product> tempProducts = products;
+        if (query != null) {
+            if (searchType.equals("all words")) {
+                return tempProducts.stream()
+                        .filter(product -> product.getDescription().toLowerCase().contains(query))
+                        .filter(product -> product.getPrice().intValue() <= maxprice)
+                        .filter(product -> product.getPrice().intValue() >= minprice)
+                        .collect(Collectors.toList());
+            } else {
+                ToIntFunction<Product> getNumberOfMatches = product -> (int) Arrays.stream(query.toLowerCase().split(" "))
+                        .filter(product.getDescription().toLowerCase()::contains)
+                        .count();
+                if (sortField != null) {
+                    Comparator<Product> comparatorField = Comparator.comparing(product -> {
+                        if (SortField.price == sortField) {
+                            return (Comparable) product.getPrice();
+                        } else {
+                            return (Comparable) product.getDescription();
+                        }
+                    });
+                    comparatorField = SortOrder.desc == sortOrder ? comparatorField.reversed() : comparatorField;
+                    tempProducts = products.stream()
+                            .sorted(Comparator.comparingInt(getNumberOfMatches).reversed()
+                                    .thenComparing(comparatorField))
+                            .filter(product -> (getNumberOfMatches.applyAsInt(product) != 0))
+                            .collect(Collectors.toList());
+                } else {
+                    tempProducts = products.stream()
+                            .sorted(Comparator.comparingInt(getNumberOfMatches).reversed())
+                            .filter(product -> (getNumberOfMatches.applyAsInt(product) != 0))
+                            .collect(Collectors.toList());
+                }
+                return tempProducts.stream()
+                        .filter(product -> product.getPrice().intValue() <= maxprice)
+                        .filter(product -> product.getPrice().intValue() >= minprice)
+                        .collect(Collectors.toList());
+            }
+        } else return tempProducts;
     }
 
     @Override

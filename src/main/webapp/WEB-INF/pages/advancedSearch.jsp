@@ -6,12 +6,48 @@
 <jsp:useBean id="products" type="java.util.ArrayList" scope="request"/>
 <tags:master pageTitle="Product List">
     <p>
-        Welcome to Expert-Soft training!
+        Advanced search
     </p>
     <form>
-        <input name="query" value="${param.query}" placeholder="Enter product name...">
-        <button>Search</button>
-        <a href="${pageContext.servletContext.contextPath}/products/advancedSearch">Advanced search</a>
+        <table>
+            <tr>
+                <td>Description</td>
+                <td>
+                    <input name="query" value="${param.query}" placeholder="Enter product name...">
+                    <c:choose>
+                        <c:when test="${param.searchType eq 'all words'}">
+                            <select name="searchType">
+                                <option selected>all words</option>
+                                <option>any word</option>
+                            </select>
+                        </c:when>
+                        <c:otherwise>
+                            <select name="searchType">
+                                <option selected>all words</option>
+                                <option selected>any word</option>
+                            </select>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+            <tr>
+                <td>Min price :</td>
+                <td>
+                    <input name="minprice" value="${param.minprice}">
+                </td>
+            </tr>
+            <tr>
+                <td>Max price :</td>
+                <td>
+                    <input name="maxprice" value="${param.maxprice}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button>Search</button>
+                </td>
+            </tr>
+        </table>
     </form>
     <c:if test="${not empty param.error}">
         <div class="error">
@@ -50,7 +86,8 @@
                 </td>
                 <td class="price">
                     <a href="${pageContext.servletContext.contextPath}/productPriceHistory/${product.id}">
-                        <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/>
+                        <fmt:formatNumber value="${product.price}" type="currency"
+                                          currencySymbol="${product.currency.symbol}"/>
                     </a>
                 </td>
                 <td>
